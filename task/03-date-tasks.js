@@ -22,7 +22,7 @@
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
 function parseDataFromRfc2822(value) {
-   throw new Error('Not implemented');
+   return Date.parse(value);
 }
 
 /**
@@ -37,7 +37,7 @@ function parseDataFromRfc2822(value) {
  *    '2016-01-19T08:07:37Z' => Date()
  */
 function parseDataFromIso8601(value) {
-   throw new Error('Not implemented');
+    return Date.parse(value);
 }
 
 
@@ -56,9 +56,17 @@ function parseDataFromIso8601(value) {
  *    Date(2015,1,1)    => false
  */
 function isLeapYear(date) {
-   throw new Error('Not implemented');
-}
 
+    var thisDate = new Date(date);
+    var year = thisDate.getFullYear();
+    if (year % 400 == 0) {
+        return true;
+    } else if (!(year % 100 == 0) && year % 4 == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 /**
  * Returns the string represention of the timespan between two dates.
@@ -76,7 +84,34 @@ function isLeapYear(date) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
 function timeSpanToString(startDate, endDate) {
-   throw new Error('Not implemented');
+
+    var HOUR_MS = 3600000;
+    var MINUTE_MS = 60000;
+    var SECOND_MS = 1000;
+
+    var start = new Date(startDate);
+    var end = new Date(endDate);
+    var span = end.getTime() - start.getTime();
+
+    var ms = span % SECOND_MS;
+    var seconds = (span % MINUTE_MS - ms) / SECOND_MS;
+    var minutes = (span % HOUR_MS - seconds * SECOND_MS - ms) / MINUTE_MS;
+    var hours = (span - span % HOUR_MS) / HOUR_MS;
+
+    if (hours === 0) { hours = '00'; } 
+    else if (hours < 10) { hours = '0' + hours.toString(); }
+
+    if (minutes === 0) { minutes = '00'; }
+    else if (minutes < 10) { minutes = '0' + minutes.toString(); }
+
+    if (seconds === 0) { seconds = '00'; }
+    else if (seconds < 10) { seconds = '0' + seconds.toString(); }
+
+    if (ms === 0) { ms = '000'}
+    else if (ms < 100) { hours = '0' + ms.toString(); }
+    else if (ms < 10) { hours = '00' + ms.toString(); }
+
+    return `${hours}:${minutes}:${seconds}.${ms}`;
 }
 
 
@@ -94,7 +129,17 @@ function timeSpanToString(startDate, endDate) {
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
 function angleBetweenClockHands(date) {
-    throw new Error('Not implemented');
+
+    var hours = Number.parseFloat(date.getUTCHours());
+    var minutes = Number.parseFloat(date.getUTCMinutes());
+
+    var minutesArrowAngle = minutes * 360 / 60;
+    var hoursArrowAngle = ((hours % 12) + minutes / 60) * 360 / 12;
+
+    var angle = Math.abs(hoursArrowAngle - minutesArrowAngle);
+    if (angle > 180) { angle = 360 - angle; }
+
+    return angle * Math.PI / 180;
 }
 
 
