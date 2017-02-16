@@ -22,10 +22,11 @@
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
 function parseDataFromRfc2822(value) {
+
     var date = new Date(value);
-    date = date.toUTCString();
-    date = new Date(date);
-    return date;
+    var timeInMs = date.getTime();
+    console.log('date: ' + date.valueOf() + ' time: ' + timeInMs);
+    return timeInMs;
 }
 
 /**
