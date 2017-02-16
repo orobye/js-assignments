@@ -22,11 +22,28 @@
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
 function parseDataFromRfc2822(value) {
-
+    
     var date = new Date(value);
-    var timeInMs = date.getTime();
-    console.log('date: ' + date.valueOf() + ' time: ' + timeInMs);
-    return timeInMs;
+
+    var year = date.getUTCFullYear();
+    var month = date.getUTCMonth();
+    var day = date.getUTCDate();
+    var hours = date.getUTCHours();
+    var minutes = date.getUTCMinutes();
+    var seconds = date.getUTCSeconds();
+
+    month = (month < 10) ? '0' + month : month;
+    day = (day < 10) ? '0' + day : day;
+    hours = (hours < 10) ? '0' + hours : hours;
+    minutes = (minutes < 10) ? '0' + minutes : minutes;
+    seconds = (seconds < 10) ? '0' + seconds: seconds;
+
+    var finalDate = new Date(Date.UTC(year, month, day, hours, minutes, seconds));
+
+    console.log( new Date('Sun, 17 May 1998 03:00:00 GMT+01') );
+    console.log( new Date(895370400000) );
+
+    return finalDate;
 }
 
 /**
