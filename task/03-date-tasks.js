@@ -23,8 +23,8 @@
  */
 function parseDataFromRfc2822(value) {
 
-    if (value.search('GMT') != -1) {
-        value += '00';
+    if (value.search('GMT') !== -1 && !/GMT\+[0-9]{4}$/.test(value) && !/GMT$/.test(value)) {
+        value += '00';  
     }
     
     return Date.parse(value);
